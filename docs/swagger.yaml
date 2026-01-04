@@ -1,0 +1,762 @@
+basePath: /api/v1
+definitions:
+  dto.AppointmentRequest:
+    properties:
+      message:
+        type: string
+      start_time:
+        type: string
+    required:
+    - start_time
+    type: object
+  dto.AppointmentResponse:
+    properties:
+      code:
+        type: string
+      start_time:
+        type: string
+    type: object
+  dto.ChangePasswordRequest:
+    properties:
+      new_password:
+        minLength: 6
+        type: string
+      old_password:
+        minLength: 6
+        type: string
+      re_new_password:
+        minLength: 6
+        type: string
+    required:
+    - new_password
+    - old_password
+    - re_new_password
+    type: object
+  dto.CommentRequest:
+    properties:
+      content:
+        type: string
+      parent_id:
+        type: string
+    required:
+    - content
+    type: object
+  dto.CommentResponse:
+    properties:
+      avatar_url:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      parent_id:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  dto.ErrorDetail:
+    properties:
+      field:
+        example: email
+        type: string
+      message:
+        example: Email must be a valid email address
+        type: string
+    type: object
+  dto.ErrorResponse:
+    properties:
+      code:
+        example: VALIDATION_ERROR
+        type: string
+      details:
+        items:
+          $ref: '#/definitions/dto.ErrorDetail'
+        type: array
+      message:
+        example: Validation failed
+        type: string
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.LoginResponse:
+    properties:
+      access_token:
+        type: string
+      expire:
+        type: integer
+      refresh_token:
+        type: string
+    type: object
+  dto.MediaItem:
+    properties:
+      id:
+        type: string
+      url:
+        type: string
+    type: object
+  dto.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.PaginationMeta:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total_items:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  dto.PaginationResponse:
+    properties:
+      data: {}
+      meta:
+        $ref: '#/definitions/dto.PaginationMeta'
+    type: object
+  dto.PetCreateRequest:
+    properties:
+      breed:
+        type: string
+      date_of_birth:
+        type: string
+      date_of_death:
+        type: string
+      description:
+        type: string
+      gender:
+        type: boolean
+      name:
+        type: string
+      type:
+        type: string
+    required:
+    - date_of_birth
+    - name
+    - type
+    type: object
+  dto.PetDetailResponse:
+    properties:
+      breed:
+        type: string
+      date_of_birth:
+        type: string
+      date_of_death:
+        type: string
+      description:
+        type: string
+      events:
+        items:
+          $ref: '#/definitions/dto.PetLifeEventItem'
+        type: array
+      gender:
+        type: boolean
+      id:
+        type: string
+      medias:
+        items:
+          $ref: '#/definitions/dto.MediaItem'
+        type: array
+      name:
+        type: string
+    type: object
+  dto.PetLifeEventItem:
+    properties:
+      date:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      story:
+        type: string
+      title:
+        type: string
+    type: object
+  dto.PetLifeEventRequest:
+    properties:
+      date:
+        type: string
+      location:
+        type: string
+      pet_id:
+        type: string
+      story:
+        type: string
+      title:
+        type: string
+    required:
+    - date
+    - pet_id
+    - title
+    type: object
+  dto.PetResponse:
+    properties:
+      avt_url:
+        type: string
+      breed:
+        type: string
+      date_of_birth:
+        type: string
+      date_of_death:
+        type: string
+      description:
+        type: string
+      gender:
+        type: boolean
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  dto.UserRegisterRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: boolean
+      last_name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+      phone:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - phone
+    type: object
+  dto.UserResponse:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      is_admin:
+        type: boolean
+      last_name:
+        type: string
+      permissions:
+        items:
+          type: string
+        type: array
+      phone:
+        type: string
+      roles:
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:8001
+info:
+  contact:
+    email: support@petservice.com
+    name: API Support
+  description: Pet Service API with JWT authentication
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Pet Service API
+  version: "1.0"
+paths:
+  /appointment/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new appointment for a pet
+      parameters:
+      - description: Appointment data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AppointmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AppointmentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Register appointment
+      tags:
+      - Appointments
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT tokens
+      parameters:
+      - description: Login credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Login user
+      tags:
+      - Authentication
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout user and blacklist token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Logout user
+      tags:
+      - Authentication
+  /me:
+    get:
+      consumes:
+      - application/json
+      description: Get current authenticated user information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get current user
+      tags:
+      - Users
+  /pet:
+    post:
+      consumes:
+      - application/json
+      description: Create a new pet for the current user
+      parameters:
+      - description: Pet data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PetCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new pet
+      tags:
+      - Pets
+  /pet/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific pet
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PetDetailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get pet detail
+      tags:
+      - Pets
+  /pet/{pet_id}/gallery:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload multiple images to pet gallery
+      parameters:
+      - description: Pet ID
+        in: path
+        name: pet_id
+        required: true
+        type: string
+      - description: Gallery image files
+        in: formData
+        name: files
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Upload pet gallery images
+      tags:
+      - Pets
+  /pet/{pet_id}/images:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload an avatar image for a pet
+      parameters:
+      - description: Pet ID
+        in: path
+        name: pet_id
+        required: true
+        type: string
+      - description: Avatar image file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Upload pet avatar
+      tags:
+      - Pets
+  /pet/life-event:
+    post:
+      consumes:
+      - application/json
+      description: Create a life event for a pet
+      parameters:
+      - description: Life event data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PetLifeEventRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create pet life event
+      tags:
+      - Pets
+  /pets:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all pets with pagination and filters
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Search query
+        in: query
+        name: search
+        type: string
+      - description: Pet name filter
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PaginationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get all pets
+      tags:
+      - Pets
+  /post/{pet_id}/comment:
+    post:
+      consumes:
+      - application/json
+      description: Create a comment on a pet post
+      parameters:
+      - description: Pet ID
+        in: path
+        name: pet_id
+        required: true
+        type: string
+      - description: Comment data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CommentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create comment
+      tags:
+      - Comments
+  /post/{pet_id}/comment/{comment_id}:
+    patch:
+      consumes:
+      - application/json
+      description: Edit an existing comment
+      parameters:
+      - description: Pet ID
+        in: path
+        name: pet_id
+        required: true
+        type: string
+      - description: Comment ID
+        in: path
+        name: comment_id
+        required: true
+        type: string
+      - description: Comment data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CommentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Edit comment
+      tags:
+      - Comments
+  /post/{pet_id}/comments:
+    get:
+      consumes:
+      - application/json
+      description: Get all comments for a pet
+      parameters:
+      - description: Pet ID
+        in: path
+        name: pet_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.CommentResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get comments
+      tags:
+      - Comments
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: User registration data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Register a new user
+      tags:
+      - Authentication
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get all users
+      tags:
+      - Users
+  /users/change-password:
+    patch:
+      consumes:
+      - application/json
+      description: Change current user password
+      parameters:
+      - description: Password change data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Change user password
+      tags:
+      - Users
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
