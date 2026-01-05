@@ -2,6 +2,10 @@
 
 This is a Golang Gin port of the Pet Service API, originally written in Python FastAPI.
 
+## Design
+
+- **Figma Design**: [Pet Care UI](https://www.figma.com/design/axle4eRnxP9TtZSS8i44mq/Pet-Care-UI?node-id=0-1&t=javBl23WbAN8qt2O-1)
+
 ## Features
 
 - User authentication with JWT
