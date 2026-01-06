@@ -287,14 +287,6 @@ For production, consider using a proper migration tool like:
 - [golang-migrate](https://github.com/golang-migrate/migrate)
 - [goose](https://github.com/pressly/goose)
 
-## Differences from Python Version
-
-### Architecture
-
-- Similar layered architecture: Handler -> Service -> Repository
-- Gin framework instead of FastAPI
-- GORM ORM instead of SQLAlchemy
-
 ### Key Changes
 
 1. **Type Safety**: Golang's static typing provides compile-time type checking
